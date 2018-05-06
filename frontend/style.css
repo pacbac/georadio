@@ -27,8 +27,47 @@ h1.logo {
 
 .center-content {
   width: 90%;
+  height: 100%;
   position: relative;
   margin: auto;
+  display: flex;
+  justify-content: space-between;
+}
+
+#left-side {
+  flex-basis: 10%;
+  flex-grow: 3;
+  padding: 10px;
+  max-width: 45%;
+}
+
+#right-side {
+  flex-basis: 10%;
+  flex-grow: 3;
+  padding: 10px;
+  max-width: 45%;
+  max-height: 100%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.song-list {
+  background-color: white;
+  width: 75%;
+  height: 75vh;
+  padding: 5px;
+  margin: auto;
+}
+
+.song-list-header {
+  text-align: center;
+  font-family: Montserrat;
+  border-bottom-style: solid;
+  border-bottom-color: black;
+  border-bottom-width: 2px;
+  padding: 5px;
+  margin: 5px 0 5px 0;
 }
 
 #pac-input {
@@ -40,14 +79,15 @@ h1.logo {
 }
 
 #map {
-  width: 50%;
-  height: 25vw;
-  margin: 10px auto 10px auto;
-  /* border-style: solid; */
-  border-width: 7px;
-  border-color: var(--bg-color);
-  border-radius: 2px;
-  filter: brightness(95%);
+  width: 45vw;
+  height: 70vh;
+  border-style: solid;
+  border-width: 5px;
+  border-color: white;
+  border-radius: 4px;
+  text-align: center;
+  font-family: Lato;
+  font-size: 20px;
 }
 
 #description {

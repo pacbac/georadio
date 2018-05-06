@@ -178,6 +178,7 @@ function requestDirections(start, end, mode) {
 }
 
 function initAutocomplete(currentloc) {
+  $("#map").text("")
   directionsService = new google.maps.DirectionsService();
   directionsDisplay = new google.maps.DirectionsRenderer();
   //ucla = new google.maps.LatLng(34.0689, -118.4452);
