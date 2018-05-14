@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    {% load static %}
+    <meta charset="utf-8">
+    <title>GeoRadio</title>
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700|Montserrat:300,400" rel="stylesheet">
+    <link rel="stylesheet" href='{% static "home/style.css" %}' type="text/css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src='{% static "home/app.js" %}'></script>
+  </head>
+  <body>
+    <nav>
+      <a href="."><h1 class="logo">GeoRadio</h1></a>
+      <input type="text" id="pac-input" name="dest-search" placeholder="Search for a destination...">
+    </nav>
+    <div class="center-content">
+      <div id="left-side">
+        <div id="map">
+          Map is loading...
+        </div>
+        <script src='{% static "home/map.js" %}'></script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAhQfMo_WF9YjXqjv8OJhjDRGsNtS2ADMU&libraries=places&callback=initAutocomplete"
+        async defer></script>
+      </div>
+      <div id="right-side">
+        <div class="song-list">
+          <h2 class="song-list-header">Songs for Location</h2>
+        </div>
+      </div>
+    </div>
+  </body>
+  <footer>
+      <div class="music-bar"></div>
+  <footer>
+</html>
