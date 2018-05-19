@@ -17,5 +17,7 @@ def index(request):
     print(json.dumps(results['tracks']['items'][0], indent=2))
     return render(request, "index.html", {'playlist': results['tracks']['items'][0]['album']['name']})
 
-def callback(request):
-    return HttpResponse("done")
+def postsong(request):
+    if request.method == 'POST':
+        return HttpResponse(json.dumps({"test": "yes"}), content_type="application/json")
+    pass

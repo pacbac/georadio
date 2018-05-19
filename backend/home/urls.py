@@ -3,5 +3,5 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name="index"),
-    re_path('callback', views.callback, name="callback")
+    path('postsong', views.postsong, name="postsong")
 ]

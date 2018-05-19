@@ -91,6 +91,10 @@ h1.logo {
   margin: 5px 0 5px 0;
 }
 
+.song-list {
+  overflow: scroll;
+}
+
 .searchbar {
   position: absolute;
   width: 100%;
@@ -300,20 +304,37 @@ footer {
   border-radius: 30px;
 }
 
-#search-songs {
-  display: block;
+.add-songs {
+  position: absolute;
   width: calc(100% - 15px);
   height: 30px;
-  margin: 0 auto;
+  bottom: 5px;
   background-color: #a5d8f7;
   border-radius: 3px;
+  --searchSongWidth: 85%;
+}
+
+#search-songs {
+  display: inline-block;
+  width: var(--searchSongWidth);
+  height: 100%;
   border-style: none;
   color: var(--textColor);
   padding-left: 5px;
-  position: absolute;
-  bottom: 5px;
+  background: transparent;
 }
 
 #search-songs::placeholder {
   color: var(--textColor);
+}
+
+button#post-song {
+  width: calc(98% - var(--searchSongWidth));
+  border-width: 0;
+  height: 100%;
+  color: white;
+  font-size: 16px;
+  padding: 0;
+  float: right;
+  background: var(--blue);
 }
