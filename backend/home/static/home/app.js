@@ -1,18 +1,3 @@
-class PlayBtn{
-  constructor(){
-
-  }
-
-  isPlayable(){
-
-  }
-
-  setPlayable(){
-
-  }
-}
-
-
 $(document).ready(function(){
   $("footer:not(#orig-footer)").remove()
 
@@ -45,6 +30,7 @@ $(document).ready(function(){
   $(document).on("mousedown", ".options", function(){
   })
 
+  window.player = $("#music-player")
   $("button#post-song").click(() => {
     if(!$("#search-songs").val().length) return
     $.post("/postsong", {
@@ -52,7 +38,10 @@ $(document).ready(function(){
     }, data => {
       console.log("Posted data", data)
       if(data.preview)
-        $("#music-player").attr("src", data.preview)
+        player.attr("src", data.preview)
+      else
+        player.attr("src", "#")
+      pause()
     })
     $("button#post-song").val("")
   })
@@ -63,14 +52,23 @@ $(document).ready(function(){
 
   /*Audio controls*/
   $(".fa-play").on("click", () => {
-    if($("#music-player")[0].canPlayType && $("#music-player")[0].paused){
-      $("#music-player")[0].play()
-      $(".fa-play").addClass("fa-pause")
+    if(player.attr("src") == "#"){
+      alert("Not playable")
       return
     }
-    $("#music-player")[0].pause()
-    $(".fa-play").removeClass("fa-pause")
+    if(player[0].canPlayType && player[0].paused) play()
+    else pause()
   })
 
-  $("#music-player").on("ended", () => $(".fa-play").removeClass("fa-pause"))
+  player.on("ended", () => $(".fa-play").removeClass("fa-pause"))
 })
+
+function pause(){
+  player[0].pause()
+  $(".fa-play").removeClass("fa-pause")
+}
+
+function play(){
+  player[0].play()
+  $(".fa-play").addClass("fa-pause")
+}
