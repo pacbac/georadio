@@ -288,7 +288,7 @@ button {
   font-size: 14px;
 }
 
-footer.orig-footer {
+footer#orig-footer {
   width: 100%;
   height: 120px;
   position: absolute;
@@ -303,6 +303,20 @@ footer.orig-footer {
   margin: auto;
   background-color: var(--greenBlue);
   border-radius: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+i.fa {
+  color: white;
+  font-size: 20px;
+  margin: 0 15px;
+  cursor: pointer;
+}
+
+i.fa-play {
+  font-size: 25px;
 }
 
 .add-songs {

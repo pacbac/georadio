@@ -1,3 +1,18 @@
+class PlayBtn{
+  constructor(){
+
+  }
+
+  isPlayable(){
+
+  }
+
+  setPlayable(){
+
+  }
+}
+
+
 $(document).ready(function(){
   $("footer:not(#orig-footer)").remove()
 
@@ -45,4 +60,17 @@ $(document).ready(function(){
   $("button#post-song").ajaxError(() => {
     //make something about like can't post song...
   })
+
+  /*Audio controls*/
+  $(".fa-play").on("click", () => {
+    if($("#music-player")[0].canPlayType && $("#music-player")[0].paused){
+      $("#music-player")[0].play()
+      $(".fa-play").addClass("fa-pause")
+      return
+    }
+    $("#music-player")[0].pause()
+    $(".fa-play").removeClass("fa-pause")
+  })
+
+  $("#music-player").on("ended", () => $(".fa-play").removeClass("fa-pause"))
 })
