@@ -1,13 +1,7 @@
 $(document).ready(function(){
+  $("footer:not(#orig-footer)").remove()
 
-  var clearSearch = e => {
-    let key = e.which || e.keyCode
-    if(key == 13) $("#pac-input").text("")
-  }
-
-  $("#pac-input").keypress(e => clearSearch(e))
-  $(".pac-item").on("click", e => clearSearch(e))
-
+  //$("input").click(function(){ $(this).val("")})
   /* CSRF Handling*/
   $.ajaxSetup({
      beforeSend: function(xhr, settings) {
@@ -37,10 +31,18 @@ $(document).ready(function(){
   })
 
   $("button#post-song").click(() => {
+    if(!$("#search-songs").val().length) return
     $.post("/postsong", {
-      'name': $("#search-songs").text()
+      'name': $("#search-songs").val()
     }, data => {
       console.log("Posted data", data)
+      if(data.preview)
+        $("#music-player").attr("src", data.preview)
     })
+    $("button#post-song").val("")
+  })
+
+  $("button#post-song").ajaxError(() => {
+    //make something about like can't post song...
   })
 })

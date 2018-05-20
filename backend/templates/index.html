@@ -32,7 +32,11 @@
         <div class="song-div">
           <h2 class="song-list-header">Songs for Location</h2>
           <div class="song-list">
-            {{ playlist }}
+            {% for track in context.playlist %}
+              <div class="track">
+                <p href="{{track.1}}">{{track.0}}</p>
+              </div>
+            {% endfor %}
           </div>
           <div class="add-songs">
             <input id="search-songs" type="text" placeholder="Search for song name...">
@@ -42,7 +46,11 @@
       </div>
     </div>
   </body>
-  <footer>
-      <div class="music-bar"></div>
+  <footer id="orig-footer">
+      <div class="music-bar">
+        <audio id="music-player" src="#" controls>
+          Your browser does not support the <code>audio</code> element.
+        </audio>
+      </div>
   <footer>
 </html>
