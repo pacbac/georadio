@@ -94,6 +94,7 @@ h1.logo {
 
 .song-list {
   overflow: auto;
+  height: 80%;
 }
 
 .searchbar {
@@ -352,4 +353,27 @@ button#post-song {
   padding: 0;
   float: right;
   background: var(--blue);
+}
+
+.track {
+  background-color: white;
+  width: 95%;
+  margin: 8px auto;
+  height: 60px;
+  font-size: 18px;
+  font-family: Lato;
+  display: flex;
+  align-items: center;
+}
+
+.track > p {
+  color: black;
+  flex-grow: 1;
+  margin-left: 4px;
+  cursor: pointer;
+}
+
+.track > img {
+  float: right;
+  margin-right: 4px;
 }

@@ -12,15 +12,19 @@ def index(request):
     global spotify
     spotify = authTools.getSpotify(spotify)
     results = spotify.search(q="This is America", type="track")
-    try:
-        track = results['tracks']['items'][0] #get first track of the search results (probably best suggestion)
-        context = {
-            'playlist': [
-                (track['album']['name'], track['preview_url'], track['uri'])
-            ]
-        }
-    except:
-        context = {'playlist': []}
+    context = {'playlist': []}
+    for track in results['tracks']['items']:
+        try:
+            #print(json.dumps(track, indent=2))
+            if track['album']['images'][2]['url']:
+                imageUrl = track['album']['images'][2]['url']
+            else:
+                imageUrl = "#"
+            imageUrl = track['album']['images'][2]['url'] if track['album']['images'][2]['url'] else "#"
+            previewUrl = track['preview_url'] if track['preview_url'] else "#"
+            context['playlist'].append((track['album']['name'], previewUrl, imageUrl, track['uri']))
+        except:
+            pass
     #print(json.dumps(track, indent=2))
     return render(request, "index.html", context)
 
@@ -29,7 +33,6 @@ def postsong(request):
     if request.method == 'POST':
         spotify = authTools.getSpotify(spotify)
         results = spotify.search(q=request.POST['name'], type="track")
-        print(results['tracks'])
         try:
             track = results['tracks']['items'][0] #get first track of the search results (probably best suggestion)
         except:
@@ -41,4 +44,4 @@ def postsong(request):
             'preview': track['preview_url']}), content_type="application/json")
         except:
             return HttpResponse(json.dumps({'valid': False}))
-    return HttpResponseForbidden()
+    return HttpResponse(json.dumps({'valid': False}))

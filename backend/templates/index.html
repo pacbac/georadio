@@ -32,9 +32,10 @@
         <div class="song-div">
           <h2 class="song-list-header">Songs for Location</h2>
           <div class="song-list">
-            {% for track in context.playlist %}
+            {% for track in playlist %}
               <div class="track">
-                <p href="{{track.1}}">{{track.0}}</p>
+                <p src="{{track.1}}">{{track.0}}</p>
+                <img src="{{track.2}}" width=50 height=50>
               </div>
             {% endfor %}
           </div>

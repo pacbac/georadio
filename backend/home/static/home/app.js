@@ -1,3 +1,6 @@
+//GLOBAL VARIABLES
+//window.player = music player
+
 $(document).ready(function(){
   $("footer:not(#orig-footer)").remove()
 
@@ -37,7 +40,7 @@ $(document).ready(function(){
       'name': $("#search-songs").val()
     }, data => {
       console.log("Posted data", data)
-      if(data.preview)
+      if(data.valid != false && data.preview)
         player.attr("src", data.preview)
       else
         player.attr("src", "#")
@@ -52,15 +55,18 @@ $(document).ready(function(){
 
   /*Audio controls*/
   $(".fa-play").on("click", () => {
-    if(player.attr("src") == "#"){
-      alert("Not playable")
-      return
-    }
+    if(!checkPlayable()) return
     if(player[0].canPlayType && player[0].paused) play()
     else pause()
   })
-
   player.on("ended", () => $(".fa-play").removeClass("fa-pause"))
+
+  /*Playlist controls*/
+  $(".track").on("click", function(){
+    player.attr("src", $(this).children("p").attr("src"))
+    if(!checkPlayable()) return
+    play()
+  })
 })
 
 function pause(){
@@ -71,4 +77,13 @@ function pause(){
 function play(){
   player[0].play()
   $(".fa-play").addClass("fa-pause")
+}
+
+function checkPlayable(){
+  if(player.attr("src") == "#"){
+    alert("Not playable")
+    pause()
+    return false
+  }
+  return true
 }
