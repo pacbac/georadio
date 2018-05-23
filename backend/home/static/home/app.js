@@ -62,7 +62,7 @@ $(document).ready(function(){
     if(player[0].canPlayType && player[0].paused) play()
     else pause()
   })
-  player.on("ended", () => $(".fa-play").removeClass("fa-pause"))
+  player.on("ended", nextSong)
 
   /*Playlist controls*/
   $(document).on("click", ".track", function(){
@@ -73,16 +73,7 @@ $(document).ready(function(){
     play()
   })
 
-  $(".fa-step-forward").click(() => {
-    if($(".selected").is(":last-child")) return
-    $(".selected").next().addClass("temp")
-    $(".selected").removeClass("selected")
-    $(".temp").addClass("selected")
-    $(".temp").removeClass("temp")
-    player.attr("src", $(".selected").children("p").attr("src"))
-    if(!checkPlayable()) return
-    play()
-  })
+  $(".fa-step-forward").click(nextSong)
 
   $(".fa-step-backward").click(() => {
     if($(".selected").is(":first-child")) return
@@ -113,4 +104,15 @@ function checkPlayable(){
     return false
   }
   return true
+}
+
+function nextSong(){
+  if($(".selected").is(":last-child")) return
+  $(".selected").next().addClass("temp")
+  $(".selected").removeClass("selected")
+  $(".temp").addClass("selected")
+  $(".temp").removeClass("temp")
+  player.attr("src", $(".selected").children("p").attr("src"))
+  if(!checkPlayable()) return
+  play()
 }
