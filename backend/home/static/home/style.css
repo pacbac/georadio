@@ -364,13 +364,18 @@ button#post-song {
   font-family: Lato;
   display: flex;
   align-items: center;
+  cursor: pointer;
+}
+
+.track:hover {
+  background-color: #e5e5e5;
 }
 
 .track > p {
   color: black;
   flex-grow: 1;
   margin-left: 4px;
-  cursor: pointer;
+  overflow-x: hidden;
 }
 
 .track > img {

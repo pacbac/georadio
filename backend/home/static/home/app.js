@@ -1,10 +1,11 @@
 //GLOBAL VARIABLES
 //window.player = music player
+const defaultAlbumImg = "https://d2qqvwdwi4u972.cloudfront.net/static/img/default_album.png"
 
 $(document).ready(function(){
+  window.player = $("#music-player")
   $("footer:not(#orig-footer)").remove()
 
-  //$("input").click(function(){ $(this).val("")})
   /* CSRF Handling*/
   $.ajaxSetup({
      beforeSend: function(xhr, settings) {
@@ -30,20 +31,22 @@ $(document).ready(function(){
      }
    });
 
-  $(document).on("mousedown", ".options", function(){
-  })
-
-  window.player = $("#music-player")
   $("button#post-song").click(() => {
     if(!$("#search-songs").val().length) return
-    $.post("/postsong", {
-      'name': $("#search-songs").val()
-    }, data => {
+    $.post("/postsong", {'name': $("#search-songs").val()}, data => {
       console.log("Posted data", data)
-      if(data.valid != false && data.preview)
-        player.attr("src", data.preview)
-      else
-        player.attr("src", "#")
+      //if data is valid and preview url is available, set player to player to play preview url
+      //if invalid or preview url unavailable, dead link is used (not playable)
+      if(!data.valid || !data.name) {
+        alert("Unable to post to server.")
+        return
+      }
+      let src = (data.preview) ? data.preview : "#"
+      let image = (data.image) ? data.image : defaultAlbumImg
+      $(".song-list").append(`<div class="track">
+        <p src="${src}">${data.name}</p>
+        <img src="${image}" width=50 height=50>
+      </div>`)
       pause()
     })
     $("button#post-song").val("")
@@ -62,7 +65,7 @@ $(document).ready(function(){
   player.on("ended", () => $(".fa-play").removeClass("fa-pause"))
 
   /*Playlist controls*/
-  $(".track").on("click", function(){
+  $(document).on("click", ".track", function(){
     player.attr("src", $(this).children("p").attr("src"))
     $(".selected").removeClass("selected")
     $(this).addClass("selected")
@@ -70,7 +73,7 @@ $(document).ready(function(){
     play()
   })
 
-  $(".fa-step-forward").click(function() {
+  $(".fa-step-forward").click(() => {
     if($(".selected").is(":last-child")) return
     $(".selected").next().addClass("temp")
     $(".selected").removeClass("selected")
@@ -81,7 +84,7 @@ $(document).ready(function(){
     play()
   })
 
-  $(".fa-step-backward").click(function() {
+  $(".fa-step-backward").click(() => {
     if($(".selected").is(":first-child")) return
     $(".selected").prev().addClass("temp")
     $(".selected").removeClass("selected")

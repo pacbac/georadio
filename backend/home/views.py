@@ -41,7 +41,8 @@ def postsong(request):
         try:
             return HttpResponse(json.dumps({'valid': True,
             'name': track['album']['name'],
-            'preview': track['preview_url']}), content_type="application/json")
+            'preview': track['preview_url'],
+            'image': track['album']['images'][2]['url']}), content_type="application/json")
         except:
             return HttpResponse(json.dumps({'valid': False}))
     return HttpResponse(json.dumps({'valid': False}))
