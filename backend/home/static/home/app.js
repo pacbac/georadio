@@ -110,7 +110,11 @@ function checkPlayable(){
 }
 
 function nextSong(){
-  if($(".selected").is(":last-child")) return
+  if($(".selected").is(":last-child")) {
+    $(".selected").removeClass("selected")
+    pause()
+    return
+  }
   $(".selected").next().addClass("temp")
   $(".selected").removeClass("selected")
   $(".temp").addClass("selected")
