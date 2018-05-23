@@ -54,7 +54,7 @@ $(document).ready(function(){
   })
 
   /*Audio controls*/
-  $(".fa-play").on("click", () => {
+  $(".fa-play").click(() => {
     if(!checkPlayable()) return
     if(player[0].canPlayType && player[0].paused) play()
     else pause()
@@ -64,6 +64,30 @@ $(document).ready(function(){
   /*Playlist controls*/
   $(".track").on("click", function(){
     player.attr("src", $(this).children("p").attr("src"))
+    $(".selected").removeClass("selected")
+    $(this).addClass("selected")
+    if(!checkPlayable()) return
+    play()
+  })
+
+  $(".fa-step-forward").click(function() {
+    if($(".selected").is(":last-child")) return
+    $(".selected").next().addClass("temp")
+    $(".selected").removeClass("selected")
+    $(".temp").addClass("selected")
+    $(".temp").removeClass("temp")
+    player.attr("src", $(".selected").children("p").attr("src"))
+    if(!checkPlayable()) return
+    play()
+  })
+
+  $(".fa-step-backward").click(function() {
+    if($(".selected").is(":first-child")) return
+    $(".selected").prev().addClass("temp")
+    $(".selected").removeClass("selected")
+    $(".temp").addClass("selected")
+    $(".temp").removeClass("temp")
+    player.attr("src", $(".selected").children("p").attr("src"))
     if(!checkPlayable()) return
     play()
   })
