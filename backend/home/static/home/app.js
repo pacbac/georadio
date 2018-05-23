@@ -69,7 +69,10 @@ $(document).ready(function(){
     player.attr("src", $(this).children("p").attr("src"))
     $(".selected").removeClass("selected")
     $(this).addClass("selected")
-    if(!checkPlayable()) return
+    if(!checkPlayable()) {
+      alert("Error: Song not playable")
+      return
+    }
     play()
   })
 
@@ -99,8 +102,8 @@ function play(){
 
 function checkPlayable(){
   if(player.attr("src") == "#"){
-    alert("Not playable")
-    pause()
+    $(".selected").css("background-color", "#ffcccc")
+    nextSong()
     return false
   }
   return true
