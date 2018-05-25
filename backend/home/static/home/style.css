@@ -355,7 +355,7 @@ button#post-song {
   background: var(--blue);
 }
 
-.track {
+.track, .no-songs {
   background-color: white;
   width: 95%;
   margin: 8px auto;
@@ -385,4 +385,9 @@ button#post-song {
 
 .selected > p {
   color: blue;
+}
+
+.no-songs {
+  text-align: center;
+  padding: 5px;
 }

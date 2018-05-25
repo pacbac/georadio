@@ -27,6 +27,21 @@ function createMap(){
   var input = document.getElementById('pac-input');
   var searchBox = new google.maps.places.SearchBox(input);
 
+  var icon = {
+    url: markerIcon,
+    size: new google.maps.Size(71, 71),
+    origin: new google.maps.Point(0, 0),
+    anchor: new google.maps.Point(17, 34),
+    scaledSize: new google.maps.Size(25, 25)
+  }
+
+  window.marker = new google.maps.Marker({
+    map,
+    icon,
+    title: 'Init Location',
+    position: window.currentLocation
+  })
+
   // Bias the SearchBox results towards current map's viewport.
   map.addListener('bounds_changed', function() {
     searchBox.setBounds(map.getBounds());
@@ -49,20 +64,48 @@ function createMap(){
       return;
     }
     var icon = {
-      url: place.icon,
+      url: markerIcon,
       size: new google.maps.Size(71, 71),
       origin: new google.maps.Point(0, 0),
       anchor: new google.maps.Point(17, 34),
       scaledSize: new google.maps.Size(25, 25)
-    };
+    }
 
     // Create a marker for each place.
-    var marker = new google.maps.Marker({
+    marker.setMap(null)
+    marker = new google.maps.Marker({
       map: map,
       icon: icon,
       title: place.name,
       position: place.geometry.location
     })
+
+    $(".song-list").html("")
+    currentLocation = {lat: place.geometry.location.lat(), lng: place.geometry.location.lng()}
+    console.log(currentLocation)
+    $.get("/playlist", {loc: currentLocation}, data => {
+      data = JSON.parse(data)
+      if(!data.valid)
+        $(".song-list").html(`<div class="song-error">
+          Error: Could not retrieve tracks
+        </div>`)
+      else if(!data.playlist.length)
+        $(".song-list").html(`<div class="no-songs">
+          No one has posted in this location yet. You can be the first!
+        </div>`)
+      else {
+        $(".song-list").html("")
+        for(var track in data.playlist) {
+          $(".song-list").append(`<div class="track">
+            <p src="${track.url}">${track.title}</p>
+            <img src="${track.albumArt}" width=50 height=50>
+          </div>`)
+        }
+      }
+
+    }).fail(() => $(".song-list").html(`<div class="song-error">
+        Error: Could not retrieve tracks
+      </div>`))
 
     if (place.geometry.viewport) {
       // Only geocodes have viewport.
@@ -72,4 +115,8 @@ function createMap(){
     }
     map.fitBounds(bounds);
   });
+
+  map.addListener('click', () => {
+    /*May add in clickable map feature, if not use searchbar*/
+  })
 }
