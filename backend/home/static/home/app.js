@@ -33,7 +33,10 @@ $(document).ready(function(){
 
   $("button#post-song").click(() => {
     if(!$("#search-songs").val().length) return
-    $.post("/postsong", {'name': $("#search-songs").val()}, data => {
+    $.post("/postsong", {
+      'name': $("#search-songs").val(),
+      loc: currentLocation
+    }, data => {
       //console.log("Posted data", data)
       //if data is valid and preview url is available, set player to player to play preview url
       //if invalid or preview url unavailable, dead link is used (not playable)
@@ -118,6 +121,6 @@ function nextSong(){
   $(".temp").addClass("selected")
   $(".temp").removeClass("temp")
   player.attr("src", $(".selected").children("p").attr("src"))
-  if(!checkPlayable()) return
+  if(!$(".selected").length || !checkPlayable()) return
   play()
 }

@@ -364,6 +364,9 @@ button#post-song {
   font-family: Lato;
   display: flex;
   align-items: center;
+}
+
+.track {
   cursor: pointer;
 }
 
