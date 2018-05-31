@@ -31,31 +31,47 @@ $(document).ready(function(){
      }
    });
 
-  $("button#post-song").click(() => {
-    if(!$("#search-songs").val().length) return
+   $("button#search-song").click(() => {
+     if(!$("#search-songs").val().length) return
+     window.searchQuery = $("#search-songs").val()
+     $.get("/searchsong", {'name': $("#search-songs").val()}, data => {
+       data = JSON.parse(data)
+       //console.log(data)
+       data.results.tracks.items.forEach((elem, index) => {
+         $(".suggestions").append(`<div class="suggested-track" id="${index}">
+           <p src="${elem.preview_url}">${elem.name}<span class="artist"> - ${elem.artists[0].name}</span></p>
+           <img src="${elem.album.images[2].url}" width=40 height=40>
+         </div>`)
+       })
+     })
+   })
+
+  $(document).on("click", ".suggested-track", function() { //click on suggestion
     $.post("/postsong", {
-      'name': $("#search-songs").val(),
+      'name': searchQuery, //the query was saved the moment the "search" button was pressed
+      'index': parseInt(this.id), //id is the index of the song in the results list
       loc: currentLocation
     }, data => {
-      //console.log("Posted data", data)
       //if data is valid and preview url is available, set player to player to play preview url
       //if invalid or preview url unavailable, dead link is used (not playable)
       if(!data.valid || !data.name) {
-        alert("Unable to post to server.")
+        alert("Unable to add song.")
         return
       }
       let src = (data.preview) ? data.preview : "#"
       let image = (data.image) ? data.image : defaultAlbumImg
+      if($(".no-songs").length || $(".song-error").length) $(".song-list").html("")
       $(".song-list").append(`<div class="track">
-        <p src="${src}">${data.name}</p>
+        <p src="${src}">${data.name}<span class="artist"> - ${data.artist}</span></p>
         <img src="${image}" width=50 height=50>
       </div>`)
       pause()
-    }).fail(() => {
-
-    })
+      $(".suggestions").html("")
+    }).fail(() => alert('Error: Could not post song'))
     $("button#post-song").val("")
   })
+
+  $(document).on("click", ":not(.suggestions)", () => $(".suggestions").html(""))
 
   /*Audio controls*/
   $(".fa-play").click(() => {

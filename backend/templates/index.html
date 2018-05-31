@@ -31,17 +31,24 @@
       <div id="right-side">
         <div class="song-div">
           <h2 class="song-list-header">Songs for Location</h2>
-          <div class="song-list">
-            {% for track in playlist %}
-              <div class="track">
-                <p src="{{track.1}}">{{track.0}}</p>
-                <img src="{{track.2}}" width=50 height=50>
-              </div>
-            {% endfor %}
-          </div>
           <div class="add-songs">
-            <input id="search-songs" type="text" placeholder="Add song...">
-            <button type="button" name="post-song" id="post-song">Post</button>
+            <input id="search-songs" type="text" placeholder="Search for a song to add">
+            <button type="button" name="search-song" id="search-song">Search</button>
+            <div class="suggestions"></div>
+          </div>
+          <div class="song-list">
+            {% if not playlist %}
+              <div class="no-songs">
+                No one has posted in this location yet. You can be the first!
+              </div>
+            {% else %}
+              {% for track in playlist %}
+                <div class="track">
+                  <p src="{{track.1}}">{{track.0}}<span class="artist">{{track.3}}</span></p>
+                  <img src="{{track.2}}" width=50 height=50>
+                </div>
+              {% endfor %}
+            {% endif %}
           </div>
         </div>
       </div>

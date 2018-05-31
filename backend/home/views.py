@@ -11,27 +11,15 @@ RADIUS = 5
 spotify = None
 
 def index(request):
-    global spotify
-    spotify = authTools.getSpotify(spotify)
-    results = spotify.search(q="This is America", type="track")
-    context = {'playlist': []}
-    for track in results['tracks']['items']:
-        try:
-            #print(json.dumps(trac5k, indent=2))
-            imageUrl = track['album']['images'][2]['url'] if track['album']['images'][2]['url'] else "#"
-            previewUrl = track['preview_url'] if track['preview_url'] else "#"
-            context['playlist'].append((track['album']['name'], previewUrl, imageUrl, track['uri']))
-        except:
-            pass
-    #print(json.dumps(track, indent=2))
+    location = (38.9072, -77.0369) #Wash DC lat/long by default
+    context = {'playlist': findPlaylist(location)}
     return render(request, "index.html", context)
 
 def getPlaylist(request):
     if request.method != 'GET':
         return HttpResponse(json.dumps({'valid': False}))
     location = (float(request.GET['loc[lat]']), float(request.GET['loc[lng]']))
-    playlistList = [obj for obj in Playlist.objects.all() if mathTools.calcDist(obj.latLng(), location) < RADIUS]
-    playlist = [] if not len(playlistList) else playlistList #playlist is empty if no playlists found, else return valid playlist
+    playlist = findPlaylist(location)
     return HttpResponse(json.dumps({'valid': True, 'location': location, 'playlist': playlist}))
 
 def postsong(request):
@@ -43,20 +31,21 @@ def postsong(request):
     results = spotify.search(q=request.POST['name'], type="track")
     location = (float(request.POST['loc[lat]']), float(request.POST['loc[lng]']))
     try:
-        track = results['tracks']['items'][0] #get first track of the search results (probably best suggestion)
+        track = results['tracks']['items'][int(request.POST['index'])] #get first track of the search results (probably best suggestion)
     except:
         return HttpResponse(json.dumps({'valid': False}))
     try:
-        title = track['album']['name']
+        title = track['name'] if track['name'] else "Unknown title"
         url = track['preview_url'] if track['preview_url'] else "#"
         albumArt = track['album']['images'][2]['url'] if track['album']['images'][2]['url'] else "#"
+        artist = track['artists'][0]['name'] if track['artists'][0]['name'] else "Unknown artist"
     except:
         return HttpResponse(json.dumps({'valid': False}))
 
     dbSongs = Song.objects.filter(title=title, url=url)
     if not dbSongs.exists(): #if doesn't already exist, add to database
-        song = Song(title=title, url=url, albumArt=albumArt)
-        print(' '.join(song.__str__()))
+        song = Song(title=title, url=url, albumArt=albumArt, artist=artist)
+        #print(' '.join(song.__str__()))
         song.save()
     else: #else if it exists, get existing song
         song = dbSongs.first()
@@ -64,7 +53,7 @@ def postsong(request):
     #get playlists within a 5 mile radius
     playlistList = [obj for obj in Playlist.objects.all() if mathTools.calcDist(obj.latLng(), location) < RADIUS]
     minPlaylist = None
-    #find playlist with smallest distance from location
+    #find playlist w/ min distance from location
     if len(playlistList):
         minPlaylist = playlistList[0]
         minDist = mathTools.calcDist(minPlaylist.latLng(), location)
@@ -75,19 +64,42 @@ def postsong(request):
                 minDist = dist
     else: #no such playlist, we will make a new one
         minPlaylist = Playlist(lat=location[0], lng=location[1], name=title)
-        print(minPlaylist)
         minPlaylist.save()
 
-    if not PlaylistSongs.objects.filter(playlist=minPlaylist, song=song).exists():
-        playlistSong = PlaylistSongs()
-        playlistSong.save()
-        playlistSong.playlist.add(minPlaylist)
-        playlistSong.song.add(song)
+    if not checkDuplicates(minPlaylist, song): #don't add duplicate songs to the same playlist
+        minPlaylist.songs.add(song)
+    else:
+        return HttpResponse(json.dumps({'valid': False}))
 
     return HttpResponse(json.dumps({'valid': True,
     'name': title,
     'preview': url,
-    'image': albumArt}), content_type="application/json")
+    'image': albumArt,
+    'artist': artist}), content_type="application/json")
 
-def wrapCalcDist(playlist):
-    return
+def findPlaylist(loc):
+    location = (loc[0], loc[1])
+    playlistList = [obj for obj in Playlist.objects.all() if mathTools.calcDist(obj.latLng(), loc) < RADIUS]
+    #playlist is empty if no playlists found, else return valid playlist
+    if len(playlistList):
+        playlist = []
+        for track in playlistList[0].songs.all():
+            playlist.append((track.title, track.url, track.albumArt, track.artist))
+        return playlist
+    else:
+        return []
+
+def checkDuplicates(playlist, song):
+    for dataSong in playlist.songs.all():
+        if(str(dataSong) == str(song)):
+            return True
+    return False
+
+def searchSong(request):
+    if request.method != 'GET':
+        return HttpResponse(json.dumps({'valid': False}))
+
+    global spotify
+    spotify = authTools.getSpotify(spotify)
+    results = spotify.search(q=request.GET['name'], type="track", limit=6)
+    return HttpResponse(json.dumps({'valid': True, 'results': results}))
