@@ -27,7 +27,6 @@ GeoRadio is a web application that allows you to pin music tracks onto a map so 
 - The audio being played is a 30-second preview of the song from Spotify. Some tracks may not have an audio track to go along with it, and when tried to be played, it will turn red and become skipped over.
 - To post a song, type in a song into the smaller search bar and click search. Suggestions should pop up. Clicking on a suggestion will then add the song to the location.
 - Typing in a different location into the maps search bar will automatically load the corresponding music playlist to that new location
-- The 
 
 Locations that already have sample songs for you to try out:
 - UCLA
