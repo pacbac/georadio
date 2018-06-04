@@ -31,20 +31,12 @@ $(document).ready(function(){
      }
    });
 
-   $("button#search-song").click(() => {
-     if(!$("#search-songs").val().length) return
-     window.searchQuery = $("#search-songs").val()
-     $.get("/searchsong", {'name': $("#search-songs").val()}, data => {
-       data = JSON.parse(data)
-       //console.log(data)
-       data.results.tracks.items.forEach((elem, index) => {
-         $(".suggestions").append(`<div class="suggested-track" id="${index}">
-           <p src="${elem.preview_url}">${elem.name}<span class="artist"> - ${elem.artists[0].name}</span></p>
-           <img src="${elem.album.images[2].url}" width=40 height=40>
-         </div>`)
-       })
-     })
+   $("button#search-song").click(searchSong)
+   $("input#search-songs").keypress(e => {
+     let key = e.which || e.keyCode
+     if(key == 13) searchSong()
    })
+
 
   $(document).on("click", ".suggested-track", function() { //click on suggestion
     $.post("/postsong", {
@@ -139,4 +131,20 @@ function nextSong(){
   player.attr("src", $(".selected").children("p").attr("src"))
   if(!$(".selected").length || !checkPlayable()) return
   play()
+}
+
+function searchSong(){
+    if(!$("#search-songs").val().length) return
+    $(".suggestions").html("")
+    window.searchQuery = $("#search-songs").val()
+    $.get("/searchsong", {'name': $("#search-songs").val()}, data => {
+      data = JSON.parse(data)
+      //console.log(data)
+      data.results.tracks.items.forEach((elem, index) => {
+        $(".suggestions").append(`<div class="suggested-track" id="${index}">
+          <p src="${elem.preview_url}">${elem.name}<span class="artist"> - ${elem.artists[0].name}</span></p>
+          <img src="${elem.album.images[2].url}" width=40 height=40>
+        </div>`)
+      })
+    })
 }
