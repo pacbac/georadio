@@ -1,7 +1,7 @@
 import spotipy, spotipy.util as util
-from .. import clientinfo as ci
+from decouple import config
 
 def getSpotify(spotify):
-    authObj = spotipy.oauth2.SpotifyClientCredentials(client_id=ci.client_id, client_secret=ci.client_secret)
+    authObj = spotipy.oauth2.SpotifyClientCredentials(client_id=config('CLIENT_ID'), client_secret=config('CLIENT_SECRET'))
     token = authObj.get_access_token()
     return spotipy.Spotify(auth=token)
