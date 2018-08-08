@@ -2,3 +2,4 @@ clientinfo.py
 __pycache__/
 .cache-*
 *.pyc
+db.sqlite3
