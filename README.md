@@ -16,10 +16,8 @@ GeoRadio is a web application that allows you to pin music tracks onto a map so 
 
 ### Running
 
-1. Head over to the first "backend" folder (with ```manage.py```) in your repository and open Git
-2. Run ```python manage.py runserver```
-3. The program may seem like it is hanging, but it is not. The server is up and the application should be running at ```localhost:8000``` by default
-4. Use your browser to go to the address the app is being hosted on
+1. Run ```python manage.py runserver```
+4. Use your browser to go to the address the app is being hosted on (usually ```localhost:8000```)
 
 ### Usage
 
