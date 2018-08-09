@@ -11,8 +11,15 @@ GeoRadio is a web application that allows you to pin music tracks onto a map so 
 
 - Python 3.x (and set the environment PATH variable on your machine so the python command works in shell as well)
 - pip (latest version here, follow instructions: https://pip.pypa.io/en/stable/installing/)
-- Django, run ``` pip install django ``` after you've installed pip and Python
-- Spotipy ``` pip install spotipy ```
+- Set up a ```.env``` file with the following values so your custom settings for the repo will work:
+  ```
+    USERNAME=123395859
+    CLIENT_ID=[[Spotify premium account ID]]
+    CLIENT_SECRET=[[Spotify premium account secret key]]
+    SECRET_KEY=Django secret key can be generated here: https://www.miniwebtool.com/django-secret-key-generator/
+    MAPS_KEY=[[Google Maps API key]]
+  ```
+ - Run ```pip install -r requirements.txt``` to install all dependencies
 
 ### Running
 
