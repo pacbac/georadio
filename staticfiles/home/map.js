@@ -1,4 +1,3 @@
-var key = 'AIzaSyAhQfMo_WF9YjXqjv8OJhjDRGsNtS2ADMU'
 var markerIcon = 'http://maps.google.com/mapfiles/ms/icons/red-dot.png'
 
 function initAutocomplete() {
