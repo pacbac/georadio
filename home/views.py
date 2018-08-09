@@ -4,14 +4,16 @@ from django.http import HttpResponse
 import json
 from .utils import authTools, mathTools
 from .models import *
+from django.views.decorators.csrf import ensure_csrf_cookie
 
 RADIUS = 5
+DEFAULTLOC = (38.9072, -77.0369) #Wash DC lat/long by default
 
-# Create your views here.
 spotify = None
 
+@ensure_csrf_cookie
 def index(request):
-    location = (38.9072, -77.0369) #Wash DC lat/long by default
+    location = DEFAULTLOC
     context = {'playlist': findPlaylist(location)}
     return render(request, "index.html", context)
 

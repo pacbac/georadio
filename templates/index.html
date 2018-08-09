@@ -2,6 +2,7 @@
 <html lang="en" dir="ltr">
   <head>
     {% load static %}
+    {% load api_extras %}
     <meta charset="utf-8">
     <title>GeoRadio</title>
     <link href="https://fonts.googleapis.com/css?family=Lato:400,700|Montserrat:300,400" rel="stylesheet">
@@ -25,7 +26,7 @@
           Map is loading...
         </div>
         <script src='{% static "home/map.js" %}'></script>
-        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAhQfMo_WF9YjXqjv8OJhjDRGsNtS2ADMU&libraries=places&callback=initAutocomplete"
+        <script src="https://maps.googleapis.com/maps/api/js?key={% maps_api_key %}&libraries=places&callback=initAutocomplete"
         async defer></script>
       </div>
       <div id="right-side">

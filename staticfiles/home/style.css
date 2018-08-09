@@ -94,6 +94,7 @@ h1.logo {
 
 .song-list {
   overflow: auto;
+  height: 80%;
 }
 
 .searchbar {
@@ -140,8 +141,8 @@ h1.logo {
   font-family: Lato;
   font-size: 20px;
   margin-left: 0;
-  position: relative;
   box-sizing: border-box;
+  padding-top: 10px;
 }
 
 #description {
@@ -320,10 +321,10 @@ i.fa-play {
 }
 
 .add-songs {
-  position: absolute;
   width: calc(100% - 15px);
   height: 30px;
-  bottom: 5px;
+  top: 5px;
+  margin: auto;
   background-color: #a5d8f7;
   border-radius: 3px;
   --searchSongWidth: 85%;
@@ -343,13 +344,63 @@ i.fa-play {
   color: var(--textColor);
 }
 
-button#post-song {
+button#search-song {
   width: calc(98% - var(--searchSongWidth));
   border-width: 0;
   height: 100%;
   color: white;
-  font-size: 16px;
+  font-size: 14px;
   padding: 0;
   float: right;
   background: var(--blue);
+}
+
+.suggestions {
+  position: absolute;
+  background-color: #efefef;
+  width: 80%;
+}
+
+.track, .no-songs, .suggested-track {
+  background-color: white;
+  width: 95%;
+  margin: 8px auto;
+  height: 60px;
+  font-size: 18px;
+  font-family: Lato;
+  display: flex;
+  align-items: center;
+}
+
+.track, .suggested-track {
+  cursor: pointer;
+}
+
+.track:hover, .suggested-track:hover {
+  background-color: #e5e5e5;
+}
+
+.track > p, .suggested-track > p {
+  color: black;
+  flex-grow: 1;
+  margin-left: 4px;
+  overflow-x: hidden;
+}
+
+.track > img, .suggested-track > img {
+  float: right;
+  margin-right: 4px;
+}
+
+.artist {
+  font-size: 14px;
+}
+
+.selected > p {
+  color: blue;
+}
+
+.no-songs {
+  text-align: center;
+  padding: 5px;
 }
